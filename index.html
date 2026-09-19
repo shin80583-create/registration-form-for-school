@@ -1,56 +1,21 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Python Mini Game</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🎮 Guess the Number</title>
 <style>
-body{font-family:Arial,sans-serif;background:#eee8ff;margin:0;display:grid;place-items:center;min-height:100vh}
-.card{background:white;width:min(92%,420px);padding:28px;border-radius:20px;text-align:center;box-shadow:0 8px 30px #0002}
-h1{margin-top:0;color:#5b2bbf}.number{font-size:18px;padding:12px;width:80px}
-button{padding:12px 18px;border:0;border-radius:10px;background:#6c3bd1;color:white;font-weight:bold;margin:8px;cursor:pointer}
-#message{min-height:48px;font-size:18px}
-small{color:#666}
-</style>
-</head>
-<body>
-<div class="card">
-<h1>🎮 Guess the Number</h1>
-<p>I'm thinking of a number from <b>1 to 20</b>.</p>
-<input id="guess" class="number" type="number" min="1" max="20" placeholder="?">
-<button onclick="play()">Guess</button>
-<button onclick="resetGame()">New Game</button>
-<p id="message">Loading Python…</p>
-<small>Python powers the game in your browser.</small>
-</div>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js"></script>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eee8ff,#d9c8ff);padding:20px}.card{width:min(94vw,430px);background:#fff;padding:28px;border-radius:24px;text-align:center;box-shadow:0 12px 35px #4b238033}h1{color:#5b2bbf;margin:0 0 10px}.number{font-size:22px;width:100px;padding:10px;text-align:center;border:2px solid #bba4ee;border-radius:10px}button{border:0;border-radius:10px;padding:12px 16px;margin:8px 4px;background:#6c3bd1;color:white;font-weight:bold;font-size:15px}button:active{transform:scale(.97)}#message{min-height:52px;font-size:18px;font-weight:bold}.tries{color:#666}
+</style></head>
+<body><main class="card">
+<h1>🎮 Guess the Number</h1><p>I'm thinking of a number from <b>1 to 20</b>.</p>
+<input id="guess" class="number" type="number" min="1" max="20" inputmode="numeric" placeholder="?">
+<div><button onclick="play()">Guess</button><button onclick="resetGame()">New Game</button></div>
+<p id="message">Make your first guess!</p><p class="tries">Attempts: <span id="tries">0</span></p>
+</main>
 <script>
-let pyodide, checkGuess, newGame;
-async function start(){
-  pyodide=await loadPyodide();
-  const code=await (await fetch("game.py")).text();
-  await pyodide.runPythonAsync(code);
-  checkGuess=pyodide.globals.get("check_guess");
-  newGame=pyodide.globals.get("new_game");
-  document.getElementById("message").textContent="Python is ready! Make your first guess.";
-}
-async function play(){
-  if(!checkGuess){return}
-  const value=Number(document.getElementById("guess").value);
-  if(!Number.isInteger(value)||value<1||value>20){
-    document.getElementById("message").textContent="Enter a whole number from 1 to 20.";
-    return;
-  }
-  const result=checkGuess(value);
-  document.getElementById("message").textContent=result;
-}
-async function resetGame(){
-  if(!newGame){return}
-  newGame();
-  document.getElementById("guess").value="";
-  document.getElementById("message").textContent="New game! Guess a number from 1 to 20.";
-}
-start().catch(e=>document.getElementById("message").textContent="Could not load Python. Refresh and try again.");
-</script>
-</body>
-</html>
+let secret=Math.floor(Math.random()*20)+1,attempts=0;
+const $=id=>document.getElementById(id);
+function play(){const n=Number($("guess").value);if(!Number.isInteger(n)||n<1||n>20){$("message").textContent="Enter a whole number from 1 to 20.";return}attempts++;$("tries").textContent=attempts;if(n<secret)$("message").textContent="⬆️ Too low! Try again.";else if(n>secret)$("message").textContent="⬇️ Too high! Try again.";else $("message").textContent="🎉 Correct! You won in "+attempts+" tries!";}
+function resetGame(){secret=Math.floor(Math.random()*20)+1;attempts=0;$("tries").textContent=0;$("guess").value="";$("message").textContent="New game! Make your guess."}
+$("guess").addEventListener("keydown",e=>{if(e.key==="Enter")play()});
+</script></body></html>
