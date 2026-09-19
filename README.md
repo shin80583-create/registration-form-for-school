@@ -1,14 +1,13 @@
-# 🎮 Python Mini Game
+# 🎮 Python Mini Game — GitHub Pages
 
-A small **Guess the Number** game written in Python.
+A beginner-friendly Guess the Number game.
 
 ## Play
-Open the live game page:
+https://shin80583-create.github.io/registration-form-for-school/
 
-**https://shin80583-create.github.io/registration-form-for-school/**
-
-The browser loads Python with Pyodide, so the game logic in `game.py` runs as Python.
+The playable Pages version uses HTML/CSS/JavaScript so it works directly in a phone browser. The Python version remains in `game.py` for learning.
 
 ## Files
-- `index.html` — game screen
-- `game.py` — Python game logic
+- `index.html` — playable browser game
+- `game.py` — Python version of the game logic
+- `.github/workflows/pages.yml` — deploys the site to GitHub Pages
